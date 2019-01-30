@@ -14,8 +14,6 @@ module Rpush
           @batch = batch
           @first_push = true
           @token_provider = token_provider
-
-          @client.on(:error) { |err| mark_batch_retryable(Time.now + 10.seconds, err) }
         end
 
         def perform
@@ -34,6 +32,10 @@ module Rpush
           raise
         ensure
           @batch.all_processed
+        end
+
+        def socket_error(error)
+          mark_batch_retryable(Time.now + 10.seconds, error)
         end
 
         protected
