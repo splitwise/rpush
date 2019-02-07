@@ -9,7 +9,7 @@ module Rpush
           sandbox: 'https://api.development.push.apple.com:443'
         }
 
-        DEFAULT_TIMEOUT = 60
+        DEFAULT_CONNECT_TIMEOUT = 60
 
         def initialize(app, delivery_class, _options = {})
           @app = app
@@ -30,7 +30,7 @@ module Rpush
 
         def create_http2_client(app)
           url = URLS[app.environment.to_sym]
-          client = NetHttp2::Client.new(url, ssl_context: prepare_ssl_context, connect_timeout: DEFAULT_TIMEOUT)
+          client = NetHttp2::Client.new(url, ssl_context: prepare_ssl_context, connect_timeout: DEFAULT_CONNECT_TIMEOUT)
           client.on(:error) do |error|
             log_error(error)
             reflect(:error, error)
