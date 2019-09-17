@@ -10,7 +10,8 @@ module Rpush
           development: 'https://api.sandbox.push.apple.com',
         }
 
-        DEFAULT_TIMEOUT = 60
+        DEFAULT_CONNECT_TIMEOUT = 60
+        DEFAULT_IDLE_TIMEOUT = 300
 
         def initialize(app, delivery_class, _options = {})
           @app = app
@@ -32,7 +33,7 @@ module Rpush
 
         def create_http2_client(app)
           url = URLS[app.environment.to_sym]
-          client = NetHttp2::Client.new(url, connect_timeout: DEFAULT_TIMEOUT)
+          client = NetHttp2::Client.new(url, connect_timeout: DEFAULT_CONNECT_TIMEOUT, idle_timeout: DEFAULT_IDLE_TIMEOUT)
           client.on(:error) do |error|
             log_error(error)
             reflect(:error, error)
