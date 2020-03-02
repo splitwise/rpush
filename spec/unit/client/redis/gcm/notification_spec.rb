@@ -1,15 +1,12 @@
 require 'unit_spec_helper'
-require 'unit/notification_shared.rb'
 
-describe Rpush::Client::ActiveRecord::Gcm::Notification do
-  it_should_behave_like 'an Notification subclass'
-
-  let(:app) { Rpush::Client::ActiveRecord::Gcm::App.create!(name: 'test', auth_key: 'abc') }
-  let(:notification_class) { Rpush::Client::ActiveRecord::Gcm::Notification }
+describe Rpush::Client::Redis::Gcm::Notification do
+  let(:app) { Rpush::Client::Redis::Gcm::App.create!(name: 'test', auth_key: 'abc') }
+  let(:notification_class) { Rpush::Client::Redis::Gcm::Notification }
   let(:notification) { notification_class.new }
 
   it "has a 'data' payload limit of 4096 bytes" do
-    notification.data = { key: "a" * 4096 }
+    notification.data = {key: "a" * 4096}
     expect(notification.valid?).to be_falsey
     expect(notification.errors[:base]).to eq ["Notification payload data cannot be larger than 4096 bytes."]
   end
@@ -59,7 +56,6 @@ describe Rpush::Client::ActiveRecord::Gcm::Notification do
 
   it 'sets the priority to high when set to high in the database' do
     notification.priority = 'high'
-    notification.app = app
     notification.save!(validate: false)
     notification.reload
     expect(notification.as_json['priority']).to eq 'high'
@@ -86,19 +82,4 @@ describe Rpush::Client::ActiveRecord::Gcm::Notification do
   it 'excludes the dry_run payload if undefined' do
     expect(notification.as_json).not_to have_key 'dry_run'
   end
-
-  # In Rails 4.2 this value casts to `false` and thus will not be included in
-  # the payload. This changed to match Ruby's semantics, and will casts to
-  # `true` in Rails 5 and above.
-  if ActiveRecord.version <= Gem::Version.new('5')
-    it 'accepts non-booleans as a falsey value' do
-      notification.dry_run = 'Not a boolean'
-      expect(notification.as_json).not_to have_key 'dry_run'
-    end
-  else
-    it 'accepts non-booleans as a truthy value' do
-      notification.dry_run = 'Not a boolean'
-      expect(notification.as_json['dry_run']).to eq true
-    end
-  end
-end if active_record?
+end if redis?
