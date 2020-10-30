@@ -1,6 +1,8 @@
 require 'unit_spec_helper'
 
 describe Rpush::Client::Redis::Gcm::Notification do
+  it_behaves_like 'Rpush::Client::Gcm::Notification'
+
   let(:app) { Rpush::Client::Redis::Gcm::App.create!(name: 'test', auth_key: 'abc') }
   let(:notification_class) { Rpush::Client::Redis::Gcm::Notification }
   let(:notification) { notification_class.new }
