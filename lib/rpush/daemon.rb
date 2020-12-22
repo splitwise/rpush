@@ -68,6 +68,9 @@ require 'rpush/daemon/adm'
 require 'rpush/daemon/pushy'
 require 'rpush/daemon/pushy/delivery'
 
+require 'rpush/daemon/webpush/delivery'
+require 'rpush/daemon/webpush'
+
 module Rpush
   module Daemon
     class << self
@@ -109,7 +112,7 @@ module Rpush
         Feeder.stop
         AppRunner.stop
         delete_pid_file
-        puts Rainbow('✔').red if Rpush.config.foreground
+        puts Rainbow('✔').red if Rpush.config.foreground && Rpush.config.foreground_logging
       end
     end
 
