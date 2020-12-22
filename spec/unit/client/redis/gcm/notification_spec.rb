@@ -82,4 +82,6 @@ describe Rpush::Client::Redis::Gcm::Notification do
   it 'excludes the dry_run payload if undefined' do
     expect(notification.as_json).not_to have_key 'dry_run'
   end
+
+  it_behaves_like 'Rpush::Client::Gcm::Notification'
 end if redis?

@@ -4,10 +4,10 @@ require 'rpush/client/active_model/notification'
 require 'rpush/client/active_model/payload_data_size_validator'
 require 'rpush/client/active_model/registration_ids_count_validator'
 
-require 'rpush/client/active_model/apns/binary_notification_validator'
 require 'rpush/client/active_model/apns/device_token_format_validator'
 require 'rpush/client/active_model/apns/app'
 require 'rpush/client/active_model/apns/notification'
+require 'rpush/client/active_model/apns/notification_payload_size_validator'
 
 require 'rpush/client/active_model/apns2/app'
 require 'rpush/client/active_model/apns2/notification'
@@ -32,3 +32,6 @@ require 'rpush/client/active_model/wns/notification'
 require 'rpush/client/active_model/pushy/app'
 require 'rpush/client/active_model/pushy/notification'
 require 'rpush/client/active_model/pushy/time_to_live_validator'
+
+require 'rpush/client/active_model/webpush/app'
+require 'rpush/client/active_model/webpush/notification'
